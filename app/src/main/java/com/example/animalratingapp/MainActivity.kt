@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val animalList = listOf("Dog", "Cat", "Bear", "Rabbit")
+        val animalList = arrayListOf("Dog", "Cat", "Bear", "Rabbit")
         val animalAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, animalList)
         val animalListView = findViewById<ListView>(R.id.listView_animal)
         animalListView.adapter = animalAdapter
