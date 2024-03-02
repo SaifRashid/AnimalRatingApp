@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.RatingBar
+import android.widget.TextView
 
 class AnimalRatingActivity : AppCompatActivity() {
     private lateinit var animalName: String
@@ -17,6 +18,8 @@ class AnimalRatingActivity : AppCompatActivity() {
         ratingBar = findViewById(R.id.ratingBar)
         animalName = intent.getStringExtra("animalName")!!
         val image = findViewById<ImageView>(R.id.image_animal)
+        val animalTitle = findViewById<TextView>(R.id.text_animal_name)
+        animalTitle.text = animalName
 
         val id = when (animalName) {
             "Dog" -> R.drawable.dog
@@ -26,7 +29,7 @@ class AnimalRatingActivity : AppCompatActivity() {
         }
         image.setImageResource(id)
 
-        val sharedPreference = getPreferences(MODE_PRIVATE)
+        val sharedPreference = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
         val rating = sharedPreference.getFloat(animalName, -1F)
         if (rating != -1F) {
             ratingBar.rating = rating
@@ -39,7 +42,8 @@ class AnimalRatingActivity : AppCompatActivity() {
         val sharedPreference = getPreferences(MODE_PRIVATE)
         val editor = sharedPreference.edit()
         editor.putFloat(animalName, ratingBar.rating)
+        editor.putString("Recent", animalName)
         editor.apply()
-        Log.i("AnimalRatingActivity", "$animalName : ${ratingBar.rating}")
+        finish()
     }
 }

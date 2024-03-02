@@ -109,7 +109,7 @@
             app:layout_constraintTop_toTopOf="@+id/image_recent" />
 
         <RatingBar
-            android:id="@+id/ratingBar2"
+            android:id="@+id/rating_Bar_Recent"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
