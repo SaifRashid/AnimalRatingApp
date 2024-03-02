@@ -41,7 +41,6 @@ class AnimalRatingActivity : AppCompatActivity() {
     }
 
     fun saveRating(view: View) {
-        sharedPreferences = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putFloat(animalName, ratingBar.rating)
         editor.putString("Recent", animalName)

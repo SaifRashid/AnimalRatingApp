@@ -32,13 +32,7 @@ class MainActivity : AppCompatActivity() {
         animalListView = findViewById(R.id.listView_animal)
         animalListView.adapter = animalAdapter
 
-        animalListView.setOnItemClickListener { _, _, position, _ ->
-            val myIntent = Intent(this, AnimalRatingActivity::class.java)
-            myIntent.putExtra("animalName", list[position])
-            startActivity(myIntent)
-        }
 
-        constraintLayoutRecent = findViewById<ConstraintLayout>(R.id.constraintLayout_recent)
     }
 
     override fun onStart() {
@@ -46,7 +40,25 @@ class MainActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
 
-        for ( (index, animalName) in list.withIndex()) {
+        var sortedList = mutableListOf<String>()
+        val sortedRatings = mutableMapOf<String, Float>()
+
+        for (animalName in list) {
+            val rating = sharedPreferences.getFloat(animalName, -1F)
+            if (rating == -1F) {
+                sortedList = list.sorted().toMutableList()
+                break
+            } else {
+                sortedRatings[animalName] = rating
+            }
+        }
+
+        if (sortedRatings.size == list.size) {
+            val result = sortedRatings.toList().sortedBy { (_, value) -> value}.toMap()
+            sortedList = result.keys.toMutableList()
+        }
+
+        for ( (index, animalName) in sortedList.withIndex()) {
             val rating = sharedPreferences.getFloat(animalName, -1F)
             if (rating != -1F) {
                 animalList[index] = "$animalName -- Rating: $rating/5"
@@ -56,6 +68,13 @@ class MainActivity : AppCompatActivity() {
         }
         animalAdapter.notifyDataSetChanged()
 
+        animalListView.setOnItemClickListener { _, _, position, _ ->
+            val myIntent = Intent(this, AnimalRatingActivity::class.java)
+            myIntent.putExtra("animalName", sortedList[position])
+            startActivity(myIntent)
+        }
+
+        constraintLayoutRecent = findViewById<ConstraintLayout>(R.id.constraintLayout_recent)
         val imageRecent = findViewById<ImageView>(R.id.image_recent)
         val textRecent = findViewById<TextView>(R.id.text_recent_animal)
         val ratingBarRecent = findViewById<RatingBar>(R.id.rating_Bar_Recent)
@@ -78,7 +97,6 @@ class MainActivity : AppCompatActivity() {
     fun clearRatings(view: View) {
         constraintLayoutRecent.visibility = View.INVISIBLE
 
-        sharedPreferences = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
