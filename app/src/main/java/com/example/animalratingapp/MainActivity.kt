@@ -54,8 +54,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (sortedRatings.size == list.size) {
-            val result = sortedRatings.toList().sortedBy { (_, value) -> value}.toMap()
-            sortedList = result.keys.toMutableList()
+            val result = sortedRatings.toList()
+                .sortedByDescending { (_, value) -> value }
+                .groupBy({ (_, value) -> value }, { (key, _) -> key })
+                .flatMap { it.value.sorted() }
+                .toMutableList()
+            sortedList.clear()
+            sortedList.addAll(result)
         }
 
         for ( (index, animalName) in sortedList.withIndex()) {
