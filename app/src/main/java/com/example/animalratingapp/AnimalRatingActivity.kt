@@ -1,5 +1,6 @@
 package com.example.animalratingapp
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.TextView
 class AnimalRatingActivity : AppCompatActivity() {
     private lateinit var animalName: String
     private lateinit var ratingBar: RatingBar
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_animal_rating)
@@ -29,8 +31,8 @@ class AnimalRatingActivity : AppCompatActivity() {
         }
         image.setImageResource(id)
 
-        val sharedPreference = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
-        val rating = sharedPreference.getFloat(animalName, -1F)
+        sharedPreferences = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
+        val rating = sharedPreferences.getFloat(animalName, -1F)
         if (rating != -1F) {
             ratingBar.rating = rating
         } else {
@@ -39,8 +41,8 @@ class AnimalRatingActivity : AppCompatActivity() {
     }
 
     fun saveRating(view: View) {
-        val sharedPreference = getPreferences(MODE_PRIVATE)
-        val editor = sharedPreference.edit()
+        sharedPreferences = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
         editor.putFloat(animalName, ratingBar.rating)
         editor.putString("Recent", animalName)
         editor.apply()
