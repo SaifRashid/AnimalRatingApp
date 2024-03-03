@@ -32,17 +32,16 @@ class MainActivity : AppCompatActivity() {
         animalListView = findViewById(R.id.listView_animal)
         animalListView.adapter = animalAdapter
 
-
+        sharedPreferences = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
     }
 
     override fun onStart() {
         super.onStart()
 
-        sharedPreferences = getSharedPreferences("AnimalRatingActivity", MODE_PRIVATE)
-
         var sortedList = mutableListOf<String>()
         val sortedRatings = mutableMapOf<String, Float>()
 
+        // Checks if all items have a rating, if not sorts list alphabetically
         for (animalName in list) {
             val rating = sharedPreferences.getFloat(animalName, -1F)
             if (rating == -1F) {
@@ -53,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Sorts ratings, if they are the same then sorts alphabetically
         if (sortedRatings.size == list.size) {
             val result = sortedRatings.toList()
                 .sortedByDescending { (_, value) -> value }
@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             sortedList.addAll(result)
         }
 
+        // Maps animalList to the sortedList
         for ( (index, animalName) in sortedList.withIndex()) {
             val rating = sharedPreferences.getFloat(animalName, -1F)
             if (rating != -1F) {
@@ -79,6 +80,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(myIntent)
         }
 
+        // Recently rated animal
         constraintLayoutRecent = findViewById<ConstraintLayout>(R.id.constraintLayout_recent)
         val imageRecent = findViewById<ImageView>(R.id.image_recent)
         val textRecent = findViewById<TextView>(R.id.text_recent_animal)
