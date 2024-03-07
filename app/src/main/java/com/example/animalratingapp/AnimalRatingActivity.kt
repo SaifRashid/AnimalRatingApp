@@ -13,6 +13,7 @@ class AnimalRatingActivity : AppCompatActivity() {
     private lateinit var animalName: String
     private lateinit var ratingBar: RatingBar
     private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_animal_rating)
