@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 
 class MainActivity : AppCompatActivity() {
@@ -103,5 +104,6 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
 
         onStart()
+        Toast.makeText(this, "All ratings have been cleared!", Toast.LENGTH_SHORT).show()
     }
 }
